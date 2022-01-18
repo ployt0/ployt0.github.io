@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>New Year, New Ubuntu</title>
+</head>
+<body>
+<header>
+<a href="https://ployt0.github.io">ployt0</a>
+</header>
+<small>18/Jan/2022</small>
+<main>
+<h1>Ubuntu Setup</h1>
+<p>
+I want to share how I like to setup my Ubuntu Desktop. I've been away from it for too long
+and at the very least these notes should help me. The installation I'm running is Ubuntu 20.04.
+I like things minimal so there were just a handful of applications showing under
+"Show applications". (Please note not every app with an icon is displayed under this.)
+It appears the full-fat installation has things I might want and you might have already.
+</p>
+<article>
+<h3>System-Monitor</h3>
+<p>
+<a href="https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet">gnome-shell-system-monitor-applet</a>
+is the full name for what many simply refer to as "system-monitor". When I search the latter in "Ubuntu Software"
+I see it is already installed! I cannot find it in the graphical "Show Applications"->All. It is a doppelganger.
+</p>
+<p>
+So paradoxxxzero's is definitely it. How then do I obey myriad conflicting instructions and get it running with the
+least fluff possible? Following the official <a href="https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet#readme">
+README</a> seems a fair bet. So it is more accurately called, "gnome-system-monitor". It was updated a few months ago
+in late 2021. The maintainer still cares.
+</p>
+<pre class="bash">
+$ sudo apt install gir1.2-gtop-2.0 gir1.2-nm-1.0 gir1.2-clutter-1.0 gnome-system-monitor
+</pre>
+<p>
+It sells it to me at just 70kB.
+</p>
+<p>
+Hmm, not seeing anything in "Show Applications", nothing in the setting panel either.
+</p>
+<p>
+That was just the <b>pre</b>-requisites. Now I'm slightly confused by what follows:
+</p>
+<ul>
+<li>Browser installation</li>
+<li>Repository installation</li>
+<li>Manual installation</li>
+</ul>
+<p>
+I was disappointed to learn, "browser installation", lives up to its name.
+It is offering <a href="https://extensions.gnome.org/extension/120/system-monitor/#">
+Click here to install browser extension</a>. Altering the "<em>gnome shell status bar</em>"
+is not my understanding of what a browser extension can do. I've never followed this
+link before in the many Ubuntu installs I've done.
+</p>
+<p>
+Stack Overflow to the rescue. I feel I've trodden this
+path before and been a little peeved that I installed pre-requisites (however small)
+for something I did not want nor need (despite its uncanny name). In his
+<a href="https://askubuntu.com/a/1116517">SO answer</a>, Tully writes to:</p>
+<pre class="bash">
+$ sudo apt-get install gnome-shell-extension-system-monitor
+</pre>
+<p>
+That used just 300kB more disk space. Nothing showing just yet but Tully advises choosing a path from:
+</p>
+<ul>
+    <li>Log out/in</li>
+    <li>Reboot</li>
+    <li>Restart gnome-session</li>
+</ul>
+<p>
+I used <code>gnome-extensions enable system-monitor@paradoxxx.zero.gmail.com</code>
+from another answer in my efforts to avoid rebooting. Tully's was shorter but left
+some room for confusion over what he meant by restarting the gnome session.
+</p>
+<p>
+It works after much patience with: <code>sudo systemctl restart display</code>
+</p>
+<p>
+I've since discovered other gnome shell extensions that require gnome session
+restarts. <a href="https://itsfoss.com/display-weather-ubuntu/">
+Pressing <b>Alt+F2</b></a>, and entering "r" will do it. Eventually. This does cause
+programs to close.
+</p>
+    </article>
+    <article>
+<h3>Weather Widget</h3>
+<p>
+    Attempting this involved more exploration and hence was moved to its own
+    page. <a href="no_key_weather_apps.html">Weather App roundup</a>, in short
+    they all failed, which probably means I am expected to supply an API key.
+    Android, watches, and Windows, all provide free weather updates, so I don't know.
+</p>
+    </article>
+</main>
+
+<footer>
+<hr>
+<small>updated 21/Jan/2022</small>
+</footer>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>Weather App roundup</title>
+</head>
+<body>
+<header>
+<a href="https://ployt0.github.io">ployt0</a>
+</header>
+<small>18/Jan/2022</small>
+<main>
+<article>
+<h1>Weather Widgets</h1>
+<p>
+We loved to mock Windows for shipping us yet another widget while delaying Windows
+11  2021.
+</p>
+<p>
+Now in the middle of Winter, January, I want a warning before I head out.
+</p>
+<ul>
+    <li>
+<p>
+The first solution is <a href="https://itsfoss.com/display-weather-ubuntu/">extension weather</a>.
+It wants 1,203 kB of disk off me for:
+</p>
+<pre class="bash">
+chrome-gnome-shell gir1.2-handy-0.0 gnome-shell-extension-prefs
+gnome-shell-extension-weather gnome-tweaks
+</pre>
+    </li>
+    <li>
+<p>
+<a href="https://extensions.gnome.org/extension/750/openweather/">extensions.gnome.org</a> I
+didn't think much of for the system monitor's instructions, but it leads me to
+<a href="https://gitlab.com/jenslody/gnome-shell-extension-openweather">their gitlab</a>
+where I find exactly the same installation instruction as for the previous solution!
+They are one! Possibly <b>the one</b>.
+</p>
+    </li>
+    <li>
+        <p>
+<a href="https://www.addictivetips.com/ubuntu-linux-tips/check-the-weather-in-gnome-shell/">addictive tips</a>
+compares weather solutions. If it's the top bar we want, then it boils down to the default built-in
+(but not into my skimmed version apparently) or "Open Weather extension".
+<cite>Alternative – Open Weather extension</cite> which is the same extension as the other two.
+At least it has <em>named</em> the incumbent, "weather tracker, known as Gnome Weather."
+        </p>
+        <p>
+Perhaps it is referred to as Open Weather because that is the backend service it has a key for and calls
+into for us.
+        </p>
+    </li>
+    <li>
+        <p>
+<a href="https://wiki.gnome.org/Apps/Weather">Gnome Weather</a>. It has a distinct
+<a href="https://gitlab.gnome.org/GNOME/gnome-weather/">gitlab URL</a> and was updated
+just a few days ago. The installation instructions require <code>flatpack</code>, of which
+I have no clue. People say it is the batteries-included solution, so I will persevere.
+        </p>
+    </li>
+</ul>
+<h2>First Encounter - Gnome Weather</h2>
+<p>
+<a href="https://launchpad.net/ubuntu/+source/gnome-weather">launchpad.net hosts a binary</a>.
+They host several but their current stable deb package agrees with the versions I'm seeing in
+gitlab. It's also what the "Ubuntu Software" app saves us the trouble of sourcing. In fact it
+is the only suitable weather app they show me.
+</p>
+<p>
+I wasn't expecting much after reading individuals' posts about Gnome Weather.
+I installed it. It gave no forecast or current weather but did find my location, nearly.
+Changing to my exact location was a mistake since the filtering of locations is broken.
+I discuss a workaround later but at this stage of proceedings I abandon this solution
+and try the four alternatives below. Upon installation I wasn't immediately furnished
+with even the current temperature at my approximated location. All most discouraging.
+</p>
+<aside>
+    <h4>Location Issue</h4>
+<p>
+I typed "London" and it knew of nowhere, in England, called that. Instead I typed
+"England" and I had some places to choose from. I didn't figure this out during the
+first installation and quickly moved on.
+</p>
+</aside>
+<h2>Second choice - Extension</h2>
+<p>
+    This leaves me the original three options, which are in fact one and may as well be called Open Weather
+    extension since it is not the bundled one but an extension, and depends on the generosity of the Open
+    Weather servers.
+</p>
+<p>
+    I installed it and saw nothing. But of course, being an extension, and knowing what I know,
+    I must restart the gnome session. <b>Alt+F2</b>, and entering "r" should do it. I had crashes.
+    So I rebooted anyway.
+</p>
+<p>
+    I discovered why I wasn't see any weather activity in the centre of my gnome status bar. It
+    was because this extension wasn't enabled:
+</p>
+<img src="images/extensions_gui.png" alt="My extensions app's first screen.">
+<p>
+    I never saw the extensions app before. Must've come with <code>gnome-shell-extension-prefs</code>.
+    There's a toggle switch and settings button there. Reading the settings I could see there were
+    fields to accept my personal API key for OpenWeatherMap.org and Dark Sky. I wasn't about to
+    register for those. I would assume the reason it is broken is because the dev's key has been
+    over-used. It's interesting to see how pervasive API keys have become; the geek shall indeed
+    inherit the world of weather!
+</p>
+<p>
+     I couldn't get the toggle switch for this extension to even switch on, but I do get
+     <i>something</i> in the gnome status bar at least:
+</p>
+<img src="images/openweatherext_is_not_fine.png" alt="Missing weather in status bar.">
+<pre class="bash">
+sudo apt remove gnome-shell-extension-weather
+sudo apt autoremove
+</pre>
+<p>
+    A full reboot was issued to get rid of the detritus from my status bar.
+</p>
+<h2>Third choice - Meteo</h2>
+<p>
+    Not sure how I missed it but <a href="https://itsfoss.com/display-weather-ubuntu/">itsfoss</a>
+    has a list of weather apps, the first three fit in the top bar and two have already been
+    discovered and discussed above. It is a <a href="https://snapcraft.io/meteo">snap</a> but itsfoss
+    describe it as "great", and "heavy". An exhausted me, having had no success with the previous
+    alternatives, would say, "ideal, reminds me of the Windows widget", but I know the back end for
+    the Windows widget would have the might of Microsoft behind it.
+</p>
+<p>
+    Besides that the link to the snap above isn't working, so instead I could try:
+</p>
+<pre class="bash">sudo snap install meteo</pre>
+<p>
+    But I won't because after watching the video it appears to also use Black Sky and OpenWeatherMap.
+    I expect they will want my key. Besides, the video made it clear it was more an "interactive"
+    app than a widget to sit quietly in the statys bar.
+    My cheap Chinese watches are better at telling me the weather than my computer!
+</p>
+<h2>Fourth choice - Cumulus</h2>
+<p>
+    Don't know how I entertained Meteo for a third! Cumulus! Cumulus is my boy! The itsfoss roundup
+    even sells it modestly: "Tray Icon (temperature only)". I downloaded a 5 year old binary from
+    its <a href="https://github.com/vadrian89/cumulus-qt/releases/">github page</a>. The whole
+    repo hasn't been touched for five years, and it shows. It's mostly python, but v3 or v2 I cannot
+    tell! Where is requirements.txt? Where is the <a href="https://github.com/kd8bny">author</a>, oh,
+    still coding in 2022.
+</p>
+<p>
+    It's a 75MB install and I couldn't see any where in the source code waiting for an API key.
+    Plus it works with Yahoo weather allegedly!
+</p>
+<img src="images/cumulus_cant_find_me_weather.png" alt="Can't find London.">
+<br/>
+<img src="images/cumulus_complete_uninstaller.png" alt="At least that 75MB included a decent uninstaller.">
+<blockquote>
+
+<strong>PPA description</strong>
+<hr>
+Discontinued - Does not anymore work due to API changes of Yahoo weather and Open Weather Map.
+
+</blockquote>
+<cite><a href="https://launchpad.net/~cumulus-team/+archive/ubuntu/cumulus">
+    launchpad.net/~cumulus-team</a></cite>, undated
+<h2>Fifth choice - My Weather Indicator</h2>
+<p>
+    <a href="https://linuxhint.com/install-simple-weather-indicator-linux/">A linuxhint article using
+    20.10 and appearing to google to have been published in March 2021</a> shows an unexplored option.
+    Given its low SEO ranking, obscurity, and the project source not having been touched since December
+    2020. I'm excusing myself here.
+</p>
+<h2>First choice - Gnome Weather</h2>
+<p>
+    This was only my first choice because it is being bundled with full fat Ubuntu. The only perks
+    I see are:
+</p>
+<ul>
+    <li>
+        Much smaller than the others.
+    </li>
+    <li>
+        Supported within the distro.
+    </li>
+    <li>
+        Access from the notification area.
+    </li>
+</ul>
+<p>Downsides:</p>
+<ul>
+    <li>
+        Forecasts not available, only current temperature.
+    </li>
+    <li>
+        No permanent notification in the capacious status bar.
+    </li>
+    <li>
+        No temperature widget, even in the notification/calendar drop down.
+    </li>
+    <li>
+        Need to open the app to use it.
+    </li>
+    <li>
+        Any weather web-site is better.
+    </li>
+</ul>
+</article>
+</main>
+<footer>
+<hr>
+<small>updated 21/Jan/2022</small>
+</footer>
+</body>
+</html>

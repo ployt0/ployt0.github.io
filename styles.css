@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'athletico';
+    src: url('font/AthleticOutfit.ttf') format('truetype');
+}
+
+header {
+    font-family: 'athletico';
+    font-size: 150%;
+}
+html {
+    font-family: "sans-serif";
+}
+pre.bash {
+    background-color: #222;
+    color: #fff;
+    padding: 0.5%;
+}
+code {
+    background-color: #222;
+    color: #fff;
+    font-size: 110%;
+    padding: 0.2%;
+}
+header a {
+    all: unset;
+}
+aside {
+    background-color: #eee;
+    margin-left: 7%;
+}

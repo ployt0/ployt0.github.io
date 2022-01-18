@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>View webp files</title>
+</head>
+<body>
+<header>
+<a href="https://ployt0.github.io">ployt0</a>
+</header>
+<small>20/Jan/2022</small>
+<main>
+<article>
+<h1>View webp files</h1>
+    On Ubuntu 20.04.
+    <h2>gthumb</h2>
+    <p>
+        I'd forgotten about this but vaguely recall installing it before where it performed
+        as an image viewer replacement, being able to move left and right between files, with
+        a little more functionality and clutter than I was used to.
+    </p>
+    <p>
+        It looks light-weight from <a href="https://itsfoss.com/webp-ubuntu-linux/">itsfoss</a>
+        where they describe it as a <a href="https://itsfoss.com/image-viewers-linux/">
+        photo viewer application"</a>.
+    </p>
+    <pre class="bash">sudo apt-get install gthumb</pre>
+    <p>
+        I can see it will take 32MB of disk on my relatively clean Ubuntu 20.04.
+    </p>
+    <h2>imagemagick</h2>
+    <p>
+        The popular batch processing tool. It requires 19.4MB of disk from me
+        and <code>webp</code> which in turn needs 631KB.
+    </p>
+    <h2>GIMP</h2>
+    <p>
+        My go-to image editor, already installed. <a href="https://www.reddit.com/r/GIMP/comments/8g5036/gimp_210_i_can_export_images_as_webp_but_i_cant/">
+        GIMP 2.10</a> already supports import and export.
+    </p>
+    <h2>Firefox</h2>
+    <p>
+        Brilliant. The default Ubuntu browser of course handles viewing, but only one at a time.
+    </p>
+    <h2>Eye Of Gnome</h2>
+    <p>
+        EoG is the default "Image Viewer" in gnome. <a href="https://askubuntu.com/a/1346951">
+        This SO answer from June 2021</a> provides comprehensive instructions for enabling webp
+        support. No need for scary PPA repositories, just one "little known"
+        <a href="https://github.com/aruiz/webp-pixbuf-loader"> github repo</a>.
+    </p>
+    <p>
+        Requires some building, with <code>meson</code>, and <code>ninja</code>.
+    </p>
+    <h2>JPEG XL</h2>
+    <p>
+        I gleaned <a href="https://jpeg.org/jpegxl/">from the SO answer above</a>, by Pablo
+        Bianchi. Lossless compression of jpeg, so essentially jpeg but better. If I hadn't
+        just solved compatibility issues with the above options, I'd hold out for this.
+    </p>
+</article>
+</main>
+<footer>
+<hr>
+<small>updated 21/Jan/2022</small>
+</footer>
+</body>
+</html>
