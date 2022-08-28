@@ -9,6 +9,15 @@ Copying this very file .git/hooks/pre-commit *may* work. Mine is:
 
 > #!/bin/sh
 > ./update_mod_date.py
+
+To verify, commit from the shell and if no html content was updated you should
+see something like:
+
+```
+Checking times of: []
+[master ff457b1] Library providing actual mtime to replace commit date.
+ 2 files changed, 21 insertions(+), 3 deletions(-)
+```
 """
 
 from datetime import datetime
