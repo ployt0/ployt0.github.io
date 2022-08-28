@@ -5,17 +5,15 @@ Used by the pre-commit git hook to update the modification time of html files.
 Still inferior to a dedicated CMS because we don't distinguish modification of
 structure, formatting, and style etc from content.
 
-Copying this very file .git/hooks/pre-commit *may* work. What I do is write
-that file as:
+Copying this very file .git/hooks/pre-commit *may* work. Mine is:
 
->    #!/bin/sh
->
->    ./update_mod_date.py
+> #!/bin/sh
+> ./update_mod_date.py
 """
-import os
-import subprocess
+
 from datetime import datetime
-from typing import List
+
+from common_git_utils import git_add_updated, find_modified_files
 
 DATE_TIME_FMT = "%y%m%d %H:%M:%S"
 
@@ -63,35 +61,16 @@ def replace_footer(html_text: str, mod_time_stamp: str, source_name: str) -> str
     return pieces1[0] + footer + pieces2[1]
 
 
-def find_modified_html_files() -> List[str]:
-    staged_files = subprocess.run("git diff --name-status --cached".split(), capture_output=True)
-    if staged_files.returncode != 0:
-        raise RuntimeError(staged_files.stderr.decode())
-    extant_modded_html_files = []
-    for line in staged_files.stdout.decode().strip().split("\n"):
-        if line.startswith("D"):
-            continue
-        if "." in line and line.split(".")[-1] in ["html", "htm"]:
-            extant_modded_html_files.append(line[1:].strip())
-    return extant_modded_html_files
-
-
-def git_add_updated(changed_file: str) -> None:
-    re_add_completed = subprocess.run(["git", "add", changed_file], capture_output=True)
-    if re_add_completed.returncode != 0:
-        raise RuntimeError(re_add_completed.stderr.decode())
-
-
 def main():
     mod_time_stamp = datetime.utcnow().strftime("%d/%b/%Y")
-    changed_files = find_modified_html_files()
+    changed_files = find_modified_files(["html", "htm"])
     print("Checking times of: {}".format(changed_files))
     for changed_file in changed_files:
         cmp_and_overwrite_mtime(changed_file, mod_time_stamp, False)
 
 
 def check_changes():
-    changed_files = find_modified_html_files()
+    changed_files = find_modified_files(["html", "htm"])
     for file_to_check in changed_files:
         validate_html(file_to_check)
 

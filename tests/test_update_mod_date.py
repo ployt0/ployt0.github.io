@@ -1,10 +1,9 @@
 import datetime
-import subprocess
 from unittest.mock import patch, mock_open, sentinel, Mock, call
 
 import pytest
 
-from update_mod_date import main, replace_footer, cmp_and_overwrite_mtime, find_modified_html_files, git_add_updated, \
+from update_mod_date import main, replace_footer, cmp_and_overwrite_mtime, \
     check_changes, validate_html
 
 SAMPLE_HTML = '''\
@@ -148,76 +147,25 @@ def test_replace_footer_bad_html():
         replace_footer(BAD_HTML, "31/Dec/2021", "bad.html")
 
 
-@patch("update_mod_date.subprocess.run", return_value=Mock(
-    subprocess.CompletedProcess, returncode=0,
-    stdout=b"M       file1.txt\nM       file2.html\nM       file3.html\n"))
-def test_find_modified_html_files(mock_run):
-    modified_html_files = find_modified_html_files()
-    mock_run.assert_called_once_with("git diff --name-status --cached".split(), capture_output=True)
-    assert modified_html_files == ["file2.html", "file3.html"]
-
-
-@patch("update_mod_date.subprocess.run", return_value=Mock(
-    subprocess.CompletedProcess, returncode=0,
-    stdout=b"M       file1.txt\nD       file2.html\nM       file3.html\n"))
-def test_find_modified_html_files_not_deleted(mock_run):
-    modified_html_files = find_modified_html_files()
-    mock_run.assert_called_once_with("git diff --name-status --cached".split(), capture_output=True)
-    assert modified_html_files == ["file3.html"]
-
-
-@patch("update_mod_date.subprocess.run", return_value=Mock(
-    subprocess.CompletedProcess, returncode=0,
-    stdout=b"M       file1.txt\nM       file2.txt\nM       file3.txt\n"))
-def test_find_modified_files_all_text(mock_run):
-    modified_html_files = find_modified_html_files()
-    mock_run.assert_called_once_with("git diff --name-status --cached".split(), capture_output=True)
-    assert modified_html_files == []
-
-
-@patch("update_mod_date.subprocess.run", return_value=Mock(
-    subprocess.CompletedProcess, returncode=1,
-    stderr=b"This is a test", stdout=b"M       file1.html\n"))
-def test_find_modified_html_files_git_error(mock_run):
-    with pytest.raises(RuntimeError):
-        find_modified_html_files()
-    mock_run.assert_called_once_with("git diff --name-status --cached".split(), capture_output=True)
-
-
-@patch("update_mod_date.subprocess.run", return_value=Mock(
-    subprocess.CompletedProcess, returncode=0))
-def test_git_add_updated(mock_run):
-    git_add_updated(sentinel.changed_file)
-    mock_run.assert_called_once_with(["git", "add", sentinel.changed_file], capture_output=True)
-
-
-@patch("update_mod_date.subprocess.run", return_value=Mock(
-    subprocess.CompletedProcess, returncode=1, stderr=b"This is a test"))
-def test_git_add_updated_git_error(mock_run):
-    with pytest.raises(RuntimeError):
-        git_add_updated(sentinel.changed_file)
-    mock_run.assert_called_once_with(["git", "add", sentinel.changed_file], capture_output=True)
-
-
-@patch("update_mod_date.cmp_and_overwrite_mtime", return_value=["sentinel1.txt", "sentinel2.txt"])
-@patch("update_mod_date.find_modified_html_files", return_value=["sentinel1.txt", "sentinel2.txt"])
+@patch("update_mod_date.cmp_and_overwrite_mtime")
+@patch("update_mod_date.find_modified_files", return_value=["sentinel1.txt", "sentinel2.txt"])
 @patch("update_mod_date.datetime", spec=datetime)
-def test_main(mock_datetime, mock_find_modified_html_files, mock_cmp_and_overwrite_mtime):
+def test_main(mock_datetime, mock_find_modified_files, mock_cmp_and_overwrite_mtime):
     mock_datetime.utcnow = Mock(
         side_effect=[datetime.datetime(2021, 12, 31, 12, 30, 00)] * 2)
     main()
-    mock_find_modified_html_files.assert_called_once_with()
+    mock_find_modified_files.assert_called_once_with(["html", "htm"])
     mock_cmp_and_overwrite_mtime.assert_has_calls([
         call("sentinel1.txt", '31/Dec/2021', False),
         call("sentinel2.txt", '31/Dec/2021', False)
     ])
 
 
-@patch("update_mod_date.validate_html", return_value=["sentinel1.txt", "sentinel2.txt"])
-@patch("update_mod_date.find_modified_html_files", return_value=["sentinel1.txt", "sentinel2.txt"])
-def test_check_changes(mock_find_modified_html_files, mock_validate_html):
+@patch("update_mod_date.validate_html")
+@patch("update_mod_date.find_modified_files", return_value=["sentinel1.txt", "sentinel2.txt"])
+def test_check_changes(mock_find_modified_files, mock_validate_html):
     check_changes()
-    mock_find_modified_html_files.assert_called_once_with()
+    mock_find_modified_files.assert_called_once_with(["html", "htm"])
     mock_validate_html.assert_has_calls([
         call("sentinel1.txt"),
         call("sentinel2.txt")
