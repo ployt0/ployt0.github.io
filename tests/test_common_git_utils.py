@@ -1,9 +1,10 @@
 import subprocess
-from unittest.mock import patch, sentinel, Mock
+from unittest.mock import patch, sentinel, Mock, call
 
 import pytest
 
-from common_git_utils import find_modified_files, git_add_updated
+from common_git_utils import find_modified_files, git_add_updated, \
+    find_mod_times
 
 
 @patch("common_git_utils.subprocess.run", return_value=Mock(
@@ -55,3 +56,11 @@ def test_git_add_updated_git_error(mock_run):
     with pytest.raises(RuntimeError):
         git_add_updated(sentinel.changed_file)
     mock_run.assert_called_once_with(["git", "add", sentinel.changed_file], capture_output=True)
+
+
+@patch("common_git_utils.os.stat")
+def test_find_mod_times(mock_stat):
+    file_list = ["filea", "x/fileb", "x/y/filec"]
+    modtime_pairs = find_mod_times(file_list)
+    mock_stat.assert_has_calls([call(f) for f in file_list])
+    assert modtime_pairs == [(f, mock_stat.return_value.st_mtime) for f in file_list]
